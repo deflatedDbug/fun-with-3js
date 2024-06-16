@@ -16,8 +16,16 @@ export default function Model() {
   const scroll = useScroll();
 
   useEffect(() => {
-    console.log("Actions:", actions);
-    actions["AllActions"].play().paused = true;
+    if (actions) {
+        console.log("Actions:", actions);
+        const allActions = actions["AllActions"];
+        if (allActions) {
+            allActions.play().paused = true;
+        }
+        else {
+            console.warn("Animations 'AllActions' not found in actions:", actions);
+        }
+    }
   }, [actions]);
   useFrame(
     () =>

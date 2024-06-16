@@ -19,7 +19,7 @@ export default function Scene() {
           <Model />
         </ScrollControls>
       </Suspense>
-      <OrbitControls enableZoom={true} maxPolarAngle={Math.PI / 2} minPolarAngle={0}/>
+      {/* <OrbitControls enableZoom={true} maxPolarAngle={Math.PI / 2} minPolarAngle={0}/> */}
     </Canvas>
   );
 }
