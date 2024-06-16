@@ -15,33 +15,33 @@ export default function Model() {
   const { actions, clips } = useAnimations(animations, scene);
   const scroll = useScroll();
 
-  useEffect(() => {
+//   useEffect(() => {
+//     if (actions) {
+//       console.log("Actions:", actions);
+//       const allActions = actions["AllActions"];
+//       if (allActions) {
+//         allActions.play().paused = true;
+//       } else {
+//         console.warn("Animations 'AllActions' not found in actions:", actions);
+//       }
+//     }
+//   }, [actions]);
+  useFrame(() => {
     if (actions) {
-        console.log("Actions:", actions);
-        const allActions = actions["AllActions"];
-        if (allActions) {
-            allActions.play().paused = true;
-        }
-        else {
-            console.warn("Animations 'AllActions' not found in actions:", actions);
-        }
+      const allActions = actions["AllActions"];
+      if (allActions) {
+        allActions.time = (allActions.getClip().duration * scroll.offset) / 4;
+      }
     }
-  }, [actions]);
-  useFrame(
-    () =>
-      //@ts-ignore
-      (actions["AllActions"].time =
-        //@ts-ignore
-        (actions["AllActions"].getClip().duration * scroll.offset) / 4)
-  );
+  });
 
-  const [{position}, api] = useSpring(() => ({
-    position: [0,0,0],
+  const [{ position }, api] = useSpring(() => ({
+    position: [0, 0, 0],
   }));
 
-  const bind = useDrag(({offset: [x,y]}) => {
-    api.start({position: [x/100, -y / 100, 0]})
-  })
+  const bind = useDrag(({ offset: [x, y] }) => {
+    api.start({ position: [x / 100, -y / 100, 0] });
+  });
   return (
     <a.group ref={group} {...bind()} position={position}>
       <primitive object={scene} />
