@@ -9,12 +9,21 @@ useGLTF.preload("/animated-car.glb");
 
 export default function Model() {
   const group = useRef<Group>(null);
-  const { nodes, materials, animations, scene } = useGLTF(
-    "../animated-car.glb"
-  );
+  const { nodes, materials, animations, scene } = useGLTF("/animated-car.glb");
   const { actions, clips } = useAnimations(animations, scene);
   const scroll = useScroll();
 
+  useEffect(() => {
+    if (actions) {
+      console.log("Actions:", actions);
+      const allActions = actions["AllActions"];
+      if (allActions) {
+        allActions.play().paused = true;
+      } else {
+        console.warn("Animation 'AllActions' not found in actions:", actions);
+      }
+    }
+  }, [actions]);
 
   useFrame(() => {
     if (actions) {
@@ -32,6 +41,7 @@ export default function Model() {
   const bind = useDrag(({ offset: [x, y] }) => {
     api.start({ position: [x / 100, -y / 100, 0] });
   });
+
   return (
     <a.group ref={group} {...bind()} position={position}>
       <primitive object={scene} />
